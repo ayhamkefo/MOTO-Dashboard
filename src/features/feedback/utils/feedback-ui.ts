@@ -4,6 +4,9 @@ import type {
   FeedbackType,
 } from '../models/feedback.types'
 
+export type FeedbackTone = 'neutral' | 'success' | 'warning' | 'danger' | 'info'
+export type FeedbackSummaryTone = 'total' | 'new' | 'read'
+
 export const FEEDBACK_STATUS_OPTIONS: Array<{ value: FeedbackStatus | 'all'; label: string }> = [
   { value: 'all', label: 'All statuses' },
   { value: 'new', label: 'New' },
@@ -133,12 +136,59 @@ const TYPE_LABELS: Record<FeedbackType, string> = {
   other: 'Other',
 }
 
+const STATUS_TONES: Record<FeedbackStatus, FeedbackTone> = {
+  new: 'danger',
+  read: 'success',
+  archived: 'warning',
+}
+
+const TYPE_TONES: Record<FeedbackType, FeedbackTone> = {
+  bug: 'danger',
+  suggestion: 'success',
+  process: 'warning',
+  inventory: 'info',
+  other: 'neutral',
+}
+
+const SUMMARY_SURFACES: Record<
+  FeedbackSummaryTone,
+  { background: string; borderColor: string; textColor: string }
+> = {
+  total: {
+    background: 'rgba(37, 99, 235, 0.08)',
+    borderColor: 'rgba(37, 99, 235, 0.18)',
+    textColor: 'var(--color-info)',
+  },
+  new: {
+    background: 'rgba(196, 69, 54, 0.08)',
+    borderColor: 'rgba(196, 69, 54, 0.18)',
+    textColor: 'var(--color-danger)',
+  },
+  read: {
+    background: 'rgba(28, 143, 95, 0.08)',
+    borderColor: 'rgba(28, 143, 95, 0.18)',
+    textColor: 'var(--color-success)',
+  },
+}
+
 export function getFeedbackStatusLabel(status: FeedbackStatus) {
   return STATUS_LABELS[status]
 }
 
 export function getFeedbackTypeLabel(type: FeedbackType) {
   return TYPE_LABELS[type]
+}
+
+export function getFeedbackStatusTone(status: FeedbackStatus) {
+  return STATUS_TONES[status]
+}
+
+export function getFeedbackTypeTone(type: FeedbackType) {
+  return TYPE_TONES[type]
+}
+
+export function getFeedbackSummarySurface(tone: FeedbackSummaryTone) {
+  return SUMMARY_SURFACES[tone]
 }
 
 export function getFeedbackInitials(name: string) {

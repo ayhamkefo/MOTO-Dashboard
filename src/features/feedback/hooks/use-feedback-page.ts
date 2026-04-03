@@ -46,16 +46,19 @@ export function useFeedbackPage() {
         label: 'Total feedback',
         value: `${total}`,
         detail: 'All employee submissions',
+        tone: 'total' as const,
       },
       {
         label: 'New',
         value: `${newCount}`,
         detail: 'Awaiting review',
+        tone: 'new' as const,
       },
       {
         label: 'Read',
         value: `${readCount}`,
         detail: 'Already triaged',
+        tone: 'read' as const,
       },
     ]
   }, [feedbackItems])
