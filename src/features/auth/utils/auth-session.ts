@@ -4,6 +4,9 @@ import type { AuthSession } from '../models/auth.types'
 const AUTH_SESSION_STORAGE_KEY = 'moto-dashboard.auth.session'
 const AUTH_SESSION_EVENT = 'moto-dashboard:auth-session'
 
+let cachedSessionStorageValue: string | null | undefined
+let cachedSessionSnapshot: AuthSession | null = null
+
 function isBrowser() {
   return typeof window !== 'undefined'
 }
@@ -51,11 +54,24 @@ export function readAuthSession(): AuthSession | null {
     return null
   }
 
-  const session = parseSession(window.localStorage.getItem(AUTH_SESSION_STORAGE_KEY))
+  const storageValue = window.localStorage.getItem(AUTH_SESSION_STORAGE_KEY)
+
+  if (storageValue === cachedSessionStorageValue) {
+    return cachedSessionSnapshot
+  }
+
+  const session = parseSession(storageValue)
 
   if (!session) {
     window.localStorage.removeItem(AUTH_SESSION_STORAGE_KEY)
+    cachedSessionStorageValue = null
+    cachedSessionSnapshot = null
+
+    return null
   }
+
+  cachedSessionStorageValue = storageValue
+  cachedSessionSnapshot = session
 
   return session
 }
@@ -69,7 +85,11 @@ export function persistAuthSession(session: AuthSession) {
     return
   }
 
-  window.localStorage.setItem(AUTH_SESSION_STORAGE_KEY, JSON.stringify(session))
+  const serializedSession = JSON.stringify(session)
+
+  window.localStorage.setItem(AUTH_SESSION_STORAGE_KEY, serializedSession)
+  cachedSessionStorageValue = serializedSession
+  cachedSessionSnapshot = session
   syncApiToken(session)
   emitAuthSessionChange()
 }
@@ -80,6 +100,8 @@ export function clearAuthSession() {
   }
 
   window.localStorage.removeItem(AUTH_SESSION_STORAGE_KEY)
+  cachedSessionStorageValue = null
+  cachedSessionSnapshot = null
   syncApiToken(null)
   emitAuthSessionChange()
 }
