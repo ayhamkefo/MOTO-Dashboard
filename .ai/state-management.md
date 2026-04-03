@@ -213,6 +213,15 @@ Rules:
 - avoid mega-stores
 - keep server data out of Zustand unless explicitly justified and documented
 
+Auth/session state should not default to Zustand during the foundation phase.
+
+If the backend contract is not finished yet:
+
+- keep session persistence behind small auth utilities
+- expose auth status through a focused hook
+- let route guards read that hook
+- only introduce a broader store if multiple distant auth concerns later prove it necessary
+
 ---
 
 ## React Hook Form Rules

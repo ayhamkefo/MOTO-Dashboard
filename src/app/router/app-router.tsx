@@ -2,6 +2,8 @@ import { RouterProvider, createBrowserRouter, Navigate } from 'react-router-dom'
 
 import { AppShellLayout } from '../layouts/app-shell-layout'
 import { AuthLayout } from '../layouts/auth-layout'
+import { ProtectedRoute } from '../../features/auth/components/protected-route'
+import { PublicRoute } from '../../features/auth/components/public-route'
 import { LoginPage } from '../../features/auth/pages/login-page'
 import { DashboardPage } from '../../features/dashboard/pages/dashboard-page'
 import { CategoriesPage } from '../../features/categories/pages/categories-page'
@@ -12,21 +14,31 @@ import { FeedbackPage } from '../../features/feedback/pages/feedback-page'
 
 const router = createBrowserRouter([
   {
-    path: '/login',
-    element: <AuthLayout />,
-    children: [{ index: true, element: <LoginPage /> }],
+    element: <PublicRoute />,
+    children: [
+      {
+        path: '/login',
+        element: <AuthLayout />,
+        children: [{ index: true, element: <LoginPage /> }],
+      },
+    ],
   },
   {
-    path: '/',
-    element: <AppShellLayout />,
+    element: <ProtectedRoute />,
     children: [
-      { index: true, element: <Navigate replace to="/dashboard" /> },
-      { path: 'dashboard', element: <DashboardPage /> },
-      { path: 'categories', element: <CategoriesPage /> },
-      { path: 'brands', element: <BrandsPage /> },
-      { path: 'products', element: <ProductsPage /> },
-      { path: 'employees', element: <EmployeesPage /> },
-      { path: 'feedback', element: <FeedbackPage /> },
+      {
+        path: '/',
+        element: <AppShellLayout />,
+        children: [
+          { index: true, element: <Navigate replace to="/dashboard" /> },
+          { path: 'dashboard', element: <DashboardPage /> },
+          { path: 'categories', element: <CategoriesPage /> },
+          { path: 'brands', element: <BrandsPage /> },
+          { path: 'products', element: <ProductsPage /> },
+          { path: 'employees', element: <EmployeesPage /> },
+          { path: 'feedback', element: <FeedbackPage /> },
+        ],
+      },
     ],
   },
 ])

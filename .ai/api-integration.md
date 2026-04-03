@@ -83,6 +83,13 @@ Examples:
 - `getCategories`
 - `createEmployee`
 
+Auth follows the same rule:
+
+- keep login access inside `features/auth/api/`
+- if the backend is not ready, a temporary local adapter may live there
+- do not embed temporary auth simulation directly inside pages or form components
+- replace the adapter implementation later without rewriting the page structure
+
 Feature API files may also contain query key factories when useful.
 
 Examples:

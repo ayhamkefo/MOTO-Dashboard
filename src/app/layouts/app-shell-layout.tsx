@@ -1,6 +1,8 @@
-import { NavLink, Outlet, useLocation } from 'react-router-dom'
+import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
 
+import { useAuthSession } from '../../features/auth/hooks/use-auth-session'
 import { APP_NAME, appNavItems } from '../../shared/constants/app-nav'
+import { Button } from '../../shared/components/button'
 import { StatusBadge } from '../../shared/components/status-badge'
 import { cn } from '../../shared/utils/cn'
 
@@ -10,7 +12,14 @@ function getActiveSection(pathname: string) {
 
 export function AppShellLayout() {
   const location = useLocation()
+  const navigate = useNavigate()
   const activeSection = getActiveSection(location.pathname)
+  const { clearSession, session } = useAuthSession()
+
+  function handleSignOut() {
+    clearSession()
+    navigate('/login', { replace: true })
+  }
 
   return (
     <div className="app-shell">
@@ -45,9 +54,17 @@ export function AppShellLayout() {
             <p className="app-topbar__eyebrow">Current section</p>
             <h1 className="app-topbar__title">{activeSection.label}</h1>
           </div>
-          <div className="app-topbar__meta">
-            <StatusBadge label="Foundation phase" tone="info" />
-            <StatusBadge label="No auth guard yet" tone="warning" />
+          <div className="app-topbar__actions">
+            <div className="app-topbar__meta">
+              <StatusBadge label="Protected route" tone="success" />
+              <StatusBadge
+                label={session ? `Signed in as ${session.userIdentifier}` : 'No session'}
+                tone="info"
+              />
+            </div>
+            <Button onClick={handleSignOut} variant="ghost">
+              Sign out
+            </Button>
           </div>
         </header>
 

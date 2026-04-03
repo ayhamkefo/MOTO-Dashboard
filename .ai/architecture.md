@@ -142,6 +142,19 @@ Suggested feature structure:
     ├── utils/
     └── store/      # optional, only if truly needed
 
+Auth should follow the same structure.
+
+Recommended auth responsibility split:
+
+- `features/auth/pages/` for thin route composition
+- `features/auth/components/` for login form UI and route-guard components
+- `features/auth/hooks/` for login submission and session-facing hooks
+- `features/auth/api/` for the login endpoint adapter
+- `features/auth/models/` for request, response, and schema types
+- `features/auth/utils/` for token or session persistence helpers
+
+Route guards may be mounted from `app/router/`, but the auth logic that powers them should stay owned by the auth feature.
+
 ---
 
 ## Feature Layer Responsibilities
