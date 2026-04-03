@@ -132,7 +132,6 @@ h3 {
 }
 
 .app-sidebar__brand-copy,
-.app-sidebar__link small,
 .page-header__description,
 .ui-card__description,
 .table-container__description,
@@ -144,7 +143,7 @@ h3 {
 }
 
 .app-sidebar__brand-copy,
-.app-sidebar__link small {
+.app-sidebar__link-icon {
   color: rgba(236, 244, 252, 0.7);
 }
 
@@ -156,15 +155,29 @@ h3 {
 
 .app-sidebar__link {
   display: flex;
-  flex-direction: column;
-  gap: var(--space-1);
-  padding: var(--space-4);
+  align-items: center;
+  gap: var(--space-3);
+  padding: 0.875rem 1rem;
   border: 1px solid transparent;
   border-radius: var(--radius-md);
+  font-weight: 600;
   transition:
     background-color 180ms ease,
     border-color 180ms ease,
     transform 180ms ease;
+}
+
+.app-sidebar__link-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  flex-shrink: 0;
+}
+
+.app-sidebar__link-label {
+  line-height: 1.2;
 }
 
 .app-sidebar__link:hover,
@@ -512,12 +525,6 @@ h3 {
   padding: var(--space-2);
 }
 
-.auth-layout__intro-meta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2);
-}
-
 .auth-layout__intro-card {
   display: flex;
   flex-direction: column;
@@ -569,7 +576,6 @@ h3 {
   gap: var(--space-5);
 }
 
-.login-form__meta,
 .login-form__actions {
   display: flex;
   flex-wrap: wrap;
@@ -586,19 +592,6 @@ h3 {
 .login-form__submit-error {
   color: var(--color-danger);
   font-size: 0.875rem;
-}
-
-.login-form__supporting-copy,
-.login-form__status-copy {
-  color: var(--color-text-soft);
-}
-
-.login-form__supporting-copy {
-  display: grid;
-  gap: var(--space-2);
-  padding: var(--space-4);
-  border-radius: var(--radius-md);
-  background: var(--color-bg-muted);
 }
 
 .login-form__status {

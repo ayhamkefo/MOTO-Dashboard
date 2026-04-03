@@ -1,12 +1,28 @@
-import type { FormEventHandler } from 'react'
+import type { CSSProperties, FormEventHandler } from 'react'
 import type { UseFormReturn } from 'react-hook-form'
 
 import { Button } from '../../../shared/components/button'
 import { Card } from '../../../shared/components/card'
 import { Input } from '../../../shared/components/input'
-import { StatusBadge } from '../../../shared/components/status-badge'
 import type { CreateBrandFormValues } from '../models/create-brand.schema'
 import { BrandLogoUpload } from './brand-logo-upload'
+
+const formStyle: CSSProperties = {
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '1rem',
+}
+
+const errorStyle: CSSProperties = {
+  color: 'var(--color-danger)',
+  fontSize: '0.875rem',
+}
+
+const statusStyle: CSSProperties = {
+  minHeight: '1.25rem',
+  color: 'var(--color-text-soft)',
+  fontSize: '0.875rem',
+}
 
 interface CreateBrandFormProps {
   form: UseFormReturn<CreateBrandFormValues>
@@ -33,64 +49,57 @@ export function CreateBrandForm({
   } = form
 
   return (
-    <Card
-      title="Create a brand"
-      description="Stage the brand name and visual identity from one compact admin surface. Validation and upload boundaries are in place now so the final API can connect without reshaping the form."
-    >
-      <form className="brands-create-form" onSubmit={onSubmit}>
-        <div className="brands-create-form__meta">
-          <StatusBadge label="UI first" tone="info" />
-          <StatusBadge label="Upload ready" tone="warning" />
-          <StatusBadge label="Mutation ready" tone="warning" />
+    <Card title="New brand">
+      <form onSubmit={onSubmit} style={formStyle}>
+        <Input
+          aria-invalid={errors.name ? 'true' : 'false'}
+          autoComplete="off"
+          id="brand-name"
+          label="Brand name"
+          placeholder="e.g. Bell"
+          {...register('name')}
+        />
+
+        <div style={{ minHeight: '1.25rem' }}>
+          {errors.name ? (
+            <p role="alert" style={errorStyle}>
+              {errors.name.message}
+            </p>
+          ) : null}
         </div>
 
-        <div className="brands-create-form__grid">
-          <div className="brands-create-form__field">
-            <Input
-              aria-invalid={errors.name ? 'true' : 'false'}
-              autoComplete="off"
-              hint="Keep the label consistent with supplier data and catalog naming."
-              id="brand-name"
-              label="Brand name"
-              placeholder="Enter brand name"
-              {...register('name')}
-            />
-            {errors.name ? (
-              <p className="brands-create-form__field-error" role="alert">
-                {errors.name.message}
-              </p>
-            ) : null}
-          </div>
+        <BrandLogoUpload
+          errorMessage={errors.logoFile?.message}
+          onFileChange={onLogoFileChange}
+          previewUrl={logoPreviewUrl}
+          statusMessage={uploadMessage}
+        />
 
-          <BrandLogoUpload
-            errorMessage={errors.logoFile?.message}
-            onFileChange={onLogoFileChange}
-            previewUrl={logoPreviewUrl}
-            statusMessage={uploadMessage}
-          />
-        </div>
-
-        <div className="brands-create-form__supporting-copy">
-          <p>The current submit action updates only local page state to keep the feature honest while the backend is unfinished.</p>
-          <p>The selected file stays isolated in the feature layer, which keeps the eventual upload adapter swap small and predictable.</p>
-        </div>
-
-        <div className="brands-create-form__actions">
+        <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
           <Button aria-busy={isSubmitting} disabled={isSubmitting} type="submit">
-            {isSubmitting ? 'Creating...' : 'Create brand'}
+            <PlusIcon />
+            {isSubmitting ? 'Creating...' : 'Create'}
           </Button>
         </div>
 
-        <div aria-live="polite" className="brands-create-form__status">
-          {submitMessage ? (
-            <p className="brands-create-form__submit-message">{submitMessage}</p>
-          ) : (
-            <p className="brands-create-form__status-copy">
-              This form is ready for a future create-brand mutation and upload handoff.
-            </p>
-          )}
+        <div aria-live="polite" style={statusStyle}>
+          {submitMessage}
         </div>
       </form>
     </Card>
+  )
+}
+
+function PlusIcon() {
+  return (
+    <svg aria-hidden="true" fill="none" height="16" viewBox="0 0 16 16" width="16">
+      <path
+        d="M8 3.333v9.334M3.333 8h9.334"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="1.5"
+      />
+    </svg>
   )
 }

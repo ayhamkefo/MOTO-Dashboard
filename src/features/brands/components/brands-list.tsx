@@ -1,9 +1,24 @@
-import { Button } from '../../../shared/components/button'
+import type { CSSProperties } from 'react'
+
 import { Card } from '../../../shared/components/card'
 import { EmptyState } from '../../../shared/components/empty-state'
 import { StatusBadge } from '../../../shared/components/status-badge'
 import type { Brand } from '../models/brand.types'
 import { BrandListItem } from './brand-list-item'
+
+const toolbarStyle: CSSProperties = {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  gap: '1rem',
+  marginBottom: '1rem',
+}
+
+const listStyle: CSSProperties = {
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '0.75rem',
+}
 
 interface BrandsListProps {
   brands: Brand[]
@@ -12,26 +27,15 @@ interface BrandsListProps {
 
 export function BrandsList({ brands, brandsCountLabel }: BrandsListProps) {
   return (
-    <Card
-      className="brands-list-card"
-      title="All brands"
-      description="A scalable brand roster with space for future edit, delete, and sync actions. The current rows already reflect the final UI density the CRUD workflow will need."
-    >
-      <div className="brands-list-card__toolbar">
-        <div className="brands-list-card__summary">
+    <Card title="Brands">
+      <div style={toolbarStyle}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
           <StatusBadge label={brandsCountLabel} tone="info" />
-          <p className="brands-list-card__summary-copy">
-            Clean logos and naming make supplier matching, product filters, and storefront presentation easier later.
-          </p>
         </div>
-
-        <Button disabled variant="secondary">
-          Row actions later
-        </Button>
       </div>
 
       {brands.length > 0 ? (
-        <div className="brands-list">
+        <div style={listStyle}>
           {brands.map((brand) => (
             <BrandListItem brand={brand} key={brand.id} />
           ))}
@@ -39,7 +43,7 @@ export function BrandsList({ brands, brandsCountLabel }: BrandsListProps) {
       ) : (
         <EmptyState
           title="No brands yet"
-          message="Create the first brand above to start building the supplier catalog structure."
+          message="Create your first brand to start organizing suppliers."
         />
       )}
     </Card>

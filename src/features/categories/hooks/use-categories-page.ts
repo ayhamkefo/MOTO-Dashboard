@@ -2,7 +2,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
-import { CATEGORIES_API_NOT_READY_MESSAGE } from '../api/categories-api'
 import { createCategorySchema, type CreateCategoryFormValues } from '../models/create-category.schema'
 import type { Category } from '../models/category.types'
 import { buildLocalCategory } from '../utils/category-ui'
@@ -53,7 +52,7 @@ export function useCategoriesPage() {
     const normalizedName = name.trim()
 
     setCategories((currentCategories) => [buildLocalCategory(normalizedName), ...currentCategories])
-    setSubmitMessage(`"${normalizedName}" was added to the local Categories view.`)
+    setSubmitMessage(`${normalizedName} has been added.`)
     form.reset()
   })
 
@@ -70,6 +69,5 @@ export function useCategoriesPage() {
     handleCreateCategory,
     isSubmitting: form.formState.isSubmitting,
     submitMessage,
-    integrationStatusMessage: CATEGORIES_API_NOT_READY_MESSAGE,
   }
 }

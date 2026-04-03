@@ -1,11 +1,34 @@
-import type { FormEventHandler } from 'react'
+import type { CSSProperties, FormEventHandler } from 'react'
 import type { UseFormReturn } from 'react-hook-form'
 
 import { Button } from '../../../shared/components/button'
 import { Card } from '../../../shared/components/card'
 import { Input } from '../../../shared/components/input'
-import { StatusBadge } from '../../../shared/components/status-badge'
 import type { CreateCategoryFormValues } from '../models/create-category.schema'
+
+const formStyle: CSSProperties = {
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '1rem',
+}
+
+const rowStyle: CSSProperties = {
+  display: 'grid',
+  gridTemplateColumns: 'minmax(0, 1fr) auto',
+  gap: '0.75rem',
+  alignItems: 'start',
+}
+
+const errorStyle: CSSProperties = {
+  color: 'var(--color-danger)',
+  fontSize: '0.875rem',
+}
+
+const statusStyle: CSSProperties = {
+  minHeight: '1.25rem',
+  color: 'var(--color-text-soft)',
+  fontSize: '0.875rem',
+}
 
 interface CreateCategoryFormProps {
   form: UseFormReturn<CreateCategoryFormValues>
@@ -26,55 +49,54 @@ export function CreateCategoryForm({
   } = form
 
   return (
-    <Card
-      title="Create a category"
-      description="Add the next catalog group from here. The form uses the final validation stack now and can be swapped onto a real mutation later without reshaping the UI."
-    >
-      <form className="categories-create-form" onSubmit={onSubmit}>
-        <div className="categories-create-form__meta">
-          <StatusBadge label="UI first" tone="info" />
-          <StatusBadge label="Mutation ready" tone="warning" />
-        </div>
-
-        <div className="categories-create-form__field">
+    <Card title="New category">
+      <form onSubmit={onSubmit} style={formStyle}>
+        <div style={rowStyle}>
           <Input
             aria-invalid={errors.name ? 'true' : 'false'}
             autoComplete="off"
-            hint="Keep names short and consistent so list pages and filters remain easy to scan."
             id="category-name"
             label="Category name"
-            placeholder="Enter category name"
+            placeholder="e.g. Helmets"
             {...register('name')}
           />
+          <Button
+            aria-busy={isSubmitting}
+            disabled={isSubmitting}
+            style={{ alignSelf: 'end', minWidth: '9.5rem' }}
+            type="submit"
+          >
+            <PlusIcon />
+            {isSubmitting ? 'Creating...' : 'Create'}
+          </Button>
+        </div>
+
+        <div style={{ minHeight: '1.25rem' }}>
           {errors.name ? (
-            <p className="categories-create-form__field-error" role="alert">
+            <p role="alert" style={errorStyle}>
               {errors.name.message}
             </p>
           ) : null}
         </div>
 
-        <div className="categories-create-form__supporting-copy">
-          <p>Future create-category mutations can connect at the feature hook boundary.</p>
-          <p>Until the backend contract is ready, submissions update only local page state.</p>
-        </div>
-
-        <div className="categories-create-form__actions">
-          <Button aria-busy={isSubmitting} disabled={isSubmitting} type="submit">
-            {isSubmitting ? 'Creating...' : 'Create category'}
-          </Button>
-        </div>
-
-        <div aria-live="polite" className="categories-create-form__status">
-          {submitMessage ? (
-            <p className="categories-create-form__submit-message">{submitMessage}</p>
-          ) : (
-            <p className="categories-create-form__status-copy">
-              This section is ready for a real mutation hook once the categories API is
-              available.
-            </p>
-          )}
+        <div aria-live="polite" style={statusStyle}>
+          {submitMessage}
         </div>
       </form>
     </Card>
+  )
+}
+
+function PlusIcon() {
+  return (
+    <svg aria-hidden="true" fill="none" height="16" viewBox="0 0 16 16" width="16">
+      <path
+        d="M8 3.333v9.334M3.333 8h9.334"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="1.5"
+      />
+    </svg>
   )
 }

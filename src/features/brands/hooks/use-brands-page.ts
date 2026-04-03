@@ -2,7 +2,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
-import { BRANDS_API_NOT_READY_MESSAGE } from '../api/brands-api'
 import { createBrandSchema, type CreateBrandFormValues } from '../models/create-brand.schema'
 import type { Brand } from '../models/brand.types'
 import { buildLocalBrand, readBrandLogoPreview } from '../utils/brand-ui'
@@ -71,7 +70,7 @@ export function useBrandsPage() {
     try {
       const previewUrl = await readBrandLogoPreview(file)
       setLogoPreviewUrl(previewUrl)
-      setUploadMessage(`${file.name} is staged locally for preview.`)
+      setUploadMessage(`${file.name} selected.`)
     } catch {
       form.setError('logoFile', {
         type: 'manual',
@@ -93,7 +92,7 @@ export function useBrandsPage() {
       }),
       ...currentBrands,
     ])
-    setSubmitMessage(`"${normalizedName}" was added to the local Brands view.`)
+    setSubmitMessage(`${normalizedName} has been added.`)
     setUploadMessage(null)
     setLogoPreviewUrl(null)
     form.reset({
@@ -114,7 +113,6 @@ export function useBrandsPage() {
     form,
     handleCreateBrand,
     handleLogoFileChange,
-    integrationStatusMessage: BRANDS_API_NOT_READY_MESSAGE,
     isSubmitting: form.formState.isSubmitting,
     logoPreviewUrl,
     submitMessage,

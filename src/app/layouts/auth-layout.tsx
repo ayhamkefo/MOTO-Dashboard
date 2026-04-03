@@ -1,7 +1,6 @@
 import { Outlet } from 'react-router-dom'
 
 import { APP_NAME } from '../../shared/constants/app-nav'
-import { StatusBadge } from '../../shared/components/status-badge'
 
 export function AuthLayout() {
   return (
@@ -17,19 +16,14 @@ export function AuthLayout() {
             </p>
           </div>
 
-          <div className="auth-layout__intro-meta">
-            <StatusBadge label="Auth foundation" tone="info" />
-            <StatusBadge label="Backend hookup pending" tone="warning" />
-          </div>
-
-          <div className="auth-layout__intro-card">
-            <p className="auth-layout__intro-title">Prepared for the next integration step</p>
+          {/* <div className="auth-layout__intro-card">
+            <p className="auth-layout__intro-title">Built for everyday store operations</p>
             <ul className="auth-layout__intro-list">
-              <li>Public entry route with protected dashboard redirect handling.</li>
-              <li>Local session boundary that can later swap to real token persistence.</li>
-              <li>Feature-local login schema, hook, and API adapter ready for backend replacement.</li>
+              <li>Review inventory activity and product organization from one workspace.</li>
+              <li>Keep team administration and operational follow-up in a single admin flow.</li>
+              <li>Move quickly through daily catalog, employee, and feedback tasks.</li>
             </ul>
-          </div>
+          </div> */}
         </section>
 
         <div className="auth-layout__panel">
