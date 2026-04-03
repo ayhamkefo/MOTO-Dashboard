@@ -16,7 +16,7 @@ export const appNavItems: AppRouteMeta[] = [
   {
     label: 'Brands',
     path: '/brands',
-    description: 'Brand management and status controls will be added here.',
+    description: 'Brand management, logo staging, and row actions live here.',
   },
   {
     label: 'Products',
